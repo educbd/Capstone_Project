@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntelliCare: Wait Time Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff; /* Alice Blue background for a light, airy feel */
+            color: #0056b3; /* Slightly dark blue for text to ensure good readability */
+        }
+        .container, .footer {
+            background-color: #ffffff; /* Pure white background for content areas and footer for clean separation */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadows for a bit of depth */
+        }
+        .navbar {
+            background-color: #007bff; /* A vivid blue for the navbar for a strong presence at the top */
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px; /* Ensures footer is not too cramped at the bottom */
+            border-top: 1px solid #e7e7e7; /* A light border for a subtle separation from content */
+        }
+        .btn-primary {
+            background-color: #0069d9; /* A strong blue for buttons to stand out */
+            border-color: #0062cc; /* Slightly darker border for 3D effect */
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover for interactive feedback */
+        }
+        .header-image {
+            margin-top: 10px;
+            background-image: url('https://via.placeholder.com/1200x300/007bff/ffffff?text=Patient+Wait+Time+Predictor');
+            background-size: cover; 
+            background-position: center; 
+            height: 300px; 
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">IntelliCare</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header-image"></div>
+
+    <div class="container">
+        <form id="patientForm" action="{{ url_for('predict')}}" method="post" class="card p-3">
+            <div class="mb-3">
+                <label for="chiefcomplaint" class="form-label">Chief Complaint:</label>
+                <input type="text" class="form-control" id="chiefcomplaint" name="chiefcomplaint" required>
+            </div>
+            <div class="mb-3">
+                <label for="dbp_triage" class="form-label">Diastolic Blood Pressure at Triage:</label>
+                <input type="text" class="form-control" id="dbp_triage" name="dbp_triage" required>
+            </div>
+            <div class="mb-3">
+                <label for="pain_triage" class="form-label">Pain Level at Triage:</label>
+                <input type="text" class="form-control" id="pain_triage" name="pain_triage" required>
+            </div>
+            <div class="mb-3">
+                <label for="sbp_triage" class="form-label">Systolic Blood Pressure at Triage:</label>
+                <input type="text" class="form-control" id="sbp_triage" name="sbp_triage" required>
+            </div>
+            <div class="mb-3">
+                <label for="temp_triage" class="form-label">Temperature at Triage:</label>
+                <input type="text" class="form-control" id="temp_triage" name="temp_triage" required>
+            </div>
+            <div class="mb-3">
+                <label for="ndc" class="form-label">NDC Code (Medication Identifier):</label>
+                <input type="text" class="form-control" id="ndc" name="ndc" required>
+            </div>
+            <div class="mb-3">
+                <label for="o2sat_triage" class="form-label">O2 Saturation at Triage:</label>
+                <input type="text" class="form-control" id="o2sat_triage" name="o2sat_triage" required>
+            </div>
+            <div class="mb-3">
+                <label for="race" class="form-label">Race:</label>
+                <select class="form-select" id="race" name="race" required>
+                    <!-- Option values as per your previous setup -->
+                    <option value="WHITE">WHITE</option>
+                    <option value="BLACK/AFRICAN AMERICAN">BLACK/AFRICAN AMERICAN</option>
+                    <option value="HISPANIC/LATINO - SALVADORAN">HISPANIC/LATINO - SALVADORAN</option>
+                    <option value="MULTIPLE RACE/ETHNICITY">MULTIPLE RACE/ETHNICITY</option>
+                    <option value="PORTUGUESE">PORTUGUESE</option>
+                    <option value="WHITE - OTHER EUROPEAN">WHITE - OTHER EUROPEAN</option>
+                    <option value="OTHER">OTHER</option>
+                    <option value="UNKNOWN">UNKNOWN</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="disposition" class="form-label">Disposition:</label>
+                <select class="form-select" id="disposition" name="disposition" required>
+                    <option value="HOME">HOME</option>
+                    <option value="ADMITTED">ADMITTED</option>
+                    <option value="TRANSFER">TRANSFER</option>
+                    <option value="OTHER">OTHER</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict Wait Time</button>
+        </form>
+        {% if prediction_text %}
+        <div id="prediction" class="alert alert-success mt-3">
+            <p>{{ prediction_text }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        <p>© 2023 Patient Wait Time Prediction. All rights reserved.</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
